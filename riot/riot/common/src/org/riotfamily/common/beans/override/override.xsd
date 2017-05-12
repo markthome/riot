@@ -1,0 +1,62 @@
+<xsd:schema xmlns="http://www.riotfamily.org/schema/common/override"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	attributeFormDefault="unqualified" elementFormDefault="qualified"
+	targetNamespace="http://www.riotfamily.org/schema/common/override">
+
+	<xsd:import namespace="http://www.springframework.org/schema/beans"
+		schemaLocation="http://www.springframework.org/schema/beans/spring-beans-4.3.xsd" />
+
+	<xsd:element name="properties">
+		<xsd:complexType>
+			<xsd:sequence minOccurs="1" maxOccurs="unbounded">
+				<xsd:element ref="beans:property" />
+			</xsd:sequence>
+			<xsd:attribute name="ref" type="xsd:string" use="required" />
+			<xsd:attribute name="order" type="xsd:integer" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="bean">
+		<xsd:complexType>
+			<xsd:group ref="beans:beanElements"/>
+			<xsd:attribute name="ref" type="xsd:string" use="required" />
+			<xsd:attribute name="class" type="xsd:string" use="required" />
+			<xsd:attribute name="merge" type="xsd:boolean" default="false" />
+			<xsd:attribute name="order" type="xsd:integer" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="put">
+		<xsd:complexType>
+			<xsd:sequence minOccurs="1" maxOccurs="unbounded">
+				<xsd:element ref="beans:entry" />
+			</xsd:sequence>
+			<xsd:attribute name="ref" type="xsd:string" use="required" />
+			<xsd:attribute name="property" type="xsd:string" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="add">
+		<xsd:complexType>
+			<xsd:group ref="beans:collectionElements" />
+			<xsd:attribute name="ref" type="xsd:string" use="required" />
+			<xsd:attribute name="property" type="xsd:string" />
+			<xsd:attribute name="append" type="xsd:boolean" default="false" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="if-present">
+		<xsd:complexType>
+			<xsd:choice minOccurs="1" maxOccurs="unbounded">
+				<xsd:element ref="properties" />
+				<xsd:element ref="bean" />
+				<xsd:element ref="put" />
+				<xsd:element ref="add" />
+				<xsd:element ref="beans:bean" />
+			</xsd:choice>
+			<xsd:attribute name="ref" type="xsd:string" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	
+</xsd:schema>

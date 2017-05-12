@@ -1,0 +1,27 @@
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+    xmlns:override="http://www.riotfamily.org/schema/common/override"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.riotfamily.org/schema/common/override
+        http://www.riotfamily.org/schema/common/override-9.3.xsd">
+
+	<bean id="riotSearchResultHighlighter" class="org.riotfamily.search.ResultHighlighter">
+		<property name="highlightPreTag" value="em" />
+		<property name="highlightPostTag" value="em" />
+	</bean>
+
+	<bean id="riotSearchController" class="org.riotfamily.search.SearchController">
+		<property name="indexDir" value="${riot.index.location=/WEB-INF/temp/index}" />
+		<property name="analyzerFactory" ref="riotSearchAnalyzerFactory" />
+		<property name="resultHighlighter" ref="riotSearchResultHighlighter" />
+	</bean>
+	
+	<override:if-present ref="pageResolver">
+	    <override:bean ref="riotSearchController"
+	       class="org.riotfamily.search.site.SiteSearchController" merge="true" />
+	</override:if-present>
+
+</beans>

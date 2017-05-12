@@ -1,0 +1,56 @@
+.cropper {
+	clear: left;
+	margin-top: 10px;
+	overflow: hidden;
+}
+.cropper .canvas {
+	border: 1px solid #ebebeb;
+}
+.cropper .resizeHandle {
+	width: 12px;
+	height: 12px;
+	background: url(images/resize.gif);
+}
+.cropper .controls {
+	margin-top: 10px;
+}
+.cropper .zoom {
+	background-color: #cdcdcd;
+	height:12px;
+	margin-bottom: 10px;
+}
+.cropper .zoomHandle {
+	width:5px;
+	height:12px;
+	background-color: #333;
+}
+.disabled .cropper .zoomHandle {
+	background-color: ButtonFace;
+}
+.cropper .mask {
+	display: none;
+}
+.disabled .cropper .mask {
+	display: block;
+	position: relative;
+	background: url(images/mask_white.png);
+	height: 100%;
+	z-index: 1;
+}
+
+.cropper .sizeSelectors {
+	height: 19px;
+	float: left;
+	margin: 0 8px 8px 0;
+}
+.cropper .sizeSelectors span {
+	font-size: 10px;
+	color: #3d3d3d;
+	line-height: 20px;
+}
+.cropper .sizeSelectors span.times {
+	padding: 0 6px 0 6px;
+}
+.cropper select {
+	font-size: 10px !important;
+}

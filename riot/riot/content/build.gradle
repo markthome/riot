@@ -1,0 +1,10 @@
+dependencies {
+	compile project(':core')
+	compile project(':media')
+	compile libraries.freemarker
+	compile libraries.spring_webmvc
+	compile libraries.dwr
+	compile libraries.xstream
+	compile libraries.servlet_api
+	compile libraries.c3p0
+}

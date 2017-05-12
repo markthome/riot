@@ -1,0 +1,482 @@
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util-4.3.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.directwebremoting.org/schema/spring-dwr
+    	http://www.directwebremoting.org/schema/spring-dwr-3.0.xsd">
+
+	<description>
+		Riot servlet (Riot Core)
+	</description>
+	
+	<tx:annotation-driven />
+	
+	<dwr:configuration>
+		<dwr:convert type="exception" class="org.riotfamily.core.security.policy.PermissionDeniedException">
+			<dwr:include method="message,permissionRequestUrl"/>
+		</dwr:convert>
+		<dwr:convert type="exception" class="java.lang.Exception">
+			<dwr:exclude method="stackTrace"/>
+		</dwr:convert>
+	</dwr:configuration>
+	
+	<dwr:annotation-config id="dwrConfig" />
+	
+	<bean id="configurer" class="org.riotfamily.common.beans.config.ProfileConfigurer">
+		<property name="ignoreResourceNotFound" value="true" />
+	</bean>
+	
+	<bean class="org.riotfamily.common.web.mvc.servlet.ReloadableDispatcherServletConfig">
+		<property name="reloadable" value="${riot-servlet.reloadable=true}" />
+	</bean>
+	
+	<bean class="org.riotfamily.common.web.filter.PluginFilterInitializer">
+		<property name="filterName" value="riot-filter" />
+	</bean>
+	
+	<!-- I18N -->
+	
+	<util:list id="messageBasenames">
+    	<value>/WEB-INF/i18n/messages</value>
+		<value>classpath:/org/riotfamily/core/runtime/i18n/messages</value>
+	</util:list>
+	
+	<bean id="messageSource" name="riotMessageSource" class="org.riotfamily.common.i18n.DefaultCodeRevealingMessageSource">
+		<property name="parentMessageSource">
+			<bean class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+				<property name="defaultEncoding" value="UTF-8" />
+				<property name="fallbackToSystemLocale" value="false" />
+				<property name="cacheSeconds" value="1" />
+		        <property name="basenames" ref="messageBasenames" />
+		    </bean>
+		</property>
+	</bean>
+
+	<bean id="messageCodesResolver" class="org.riotfamily.common.i18n.RiotMessageCodesResolver" />
+	
+	<bean class="org.riotfamily.common.web.mvc.scope.FlashScopeRequestInterceptor" />
+
+	<bean class="org.riotfamily.common.web.mvc.interceptor.OpenSessionInViewRequestInterceptor">
+		<property name="sessionFactory" ref="sessionFactory" />			
+	</bean>
+
+	<!-- Spring Web-MVC Setup -->
+	
+	<dwr:controller id="dwrController" debug="true">
+		<dwr:config-param name="maxCallCount" value="50"/>
+		<dwr:config-param name="accessLogLevel" value="exception"/>
+		<dwr:config-param name="activeReverseAjaxEnabled" value="true" />
+	</dwr:controller>
+	
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.FixedLocaleResolver">
+    	<description>
+    		Resolves the Locale for Riot users.
+    	</description>
+    	<property name="defaultLocale"><value>en_US</value></property>
+    </bean>
+    
+	<bean class="org.riotfamily.common.web.mvc.interceptor.RequestHolderInterceptor" />
+			
+	<bean id="screenHandlerMapping" class="org.riotfamily.core.screen.ScreenHandlerMapping">
+		<constructor-arg ref="screenRepository" />
+		<property name="order" value="1" />
+		<property name="servletPrefix" ref="riotServletPrefix" />
+		<property name="interceptors">
+			<list>
+				<bean class="org.riotfamily.core.view.NoCacheHeaderInterceptor" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="beanNameHandlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
+		<property name="order" value="2" />
+	</bean>
+	
+	<bean class="org.directwebremoting.spring.DwrHandlerMapping" />
+    
+    <bean class="org.riotfamily.common.web.mvc.mapping.ReverseUrlHanderMappingAdapter">
+    	<property name="servletPrefix" ref="riotServletPrefix" />
+    </bean>
+    
+    <bean id="handlerUrlResolver" class="org.riotfamily.common.web.mvc.mapping.HandlerUrlResolver">
+		<property name="parent">
+			<bean class="org.riotfamily.common.beans.factory.WebApplicationContextBeanImporter">
+				<property name="servletName" value="website" />
+				<property name="beanName" value="handlerUrlResolver" />
+			</bean>	
+		</property>
+	</bean>
+	
+	<bean id="multipartResolver" class="org.riotfamily.forms.fileupload.FormsMultipartResolver">
+		<description>
+			MultipartResolver that provides information about the file upload progress.
+		</description>
+		<constructor-arg>
+			<bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+		</constructor-arg>
+	</bean>
+
+	<bean id="exceptionResolver" class="org.riotfamily.common.web.mvc.mapping.AdvancedMappingExceptionResolver">
+		<description>
+			Exception resolver that outputs a nicely formatted error message.		
+		</description>
+		<property name="defaultErrorView" value="classpath:/org/riotfamily/core/runtime/view/error.ftl" />
+	</bean>
+
+    <bean id="cacheKeyAugmentor" class="org.riotfamily.core.resource.CodeRevelationCacheKeyAugmentor">
+		<constructor-arg ref="messageSource" />
+	</bean>
+	
+    <bean id="cacheableHandlerAdapter" class="org.riotfamily.common.web.cache.controller.CacheableControllerHandlerAdapter">
+    	<description>
+    		HandlerAdapter that handles CacheableControllers.
+    	</description>
+		<constructor-arg ref="cacheService" />
+		<property name="cacheKeyAugmentor" ref="cacheKeyAugmentor" />
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter">
+		<description>
+			HandlerAdapter that handles regular (non-cacheable) Controllers.
+		</description>
+	</bean>
+	
+	<bean id="annotationMethodHandlerAdapter" class="org.riotfamily.common.web.cache.annotation.CacheAnnotationHandlerAdapter">
+		<description>
+			HandlerAdapter that handles @RequestMapping annotated beans
+			and supports the @Cache annotation.
+		</description>
+		<constructor-arg ref="cacheService" />
+		<constructor-arg ref="cacheKeyAugmentor" />
+		<property name="customArgumentResolvers">
+			<list>
+				<bean class="org.riotfamily.common.web.mvc.scope.FlashScopeArgumentResolver" />
+			</list>
+		</property>
+	</bean>	
+
+	<bean id="freemarkerConfig" class="org.riotfamily.common.web.cache.freemarker.WebsiteFreeMarkerConfigurer">
+		<description>
+			FreeMarker configuration.
+		</description>
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="preTemplateLoaders">
+			<list>
+				<bean class="org.riotfamily.common.freemarker.ResourceTemplateLoader" />
+			</list>
+		</property>
+		<property name="freemarkerVariables">
+			<map>
+				<entry key="runtime" value-ref="riotRuntime" />
+				<entry key="customStyleSheets" value-ref="customStyleSheets" />
+			</map>
+		</property>
+		<property name="macroLibraries">
+			<map>
+				<entry key="c" value="classpath:org/riotfamily/common/web/macro/common.ftl" />
+				<entry key="template" value="classpath:org/riotfamily/common/web/template/template.ftl" />
+				<entry key="riot" value="classpath:org/riotfamily/core/view/riot.ftl" />
+			</map>
+		</property>
+		<property name="utilityClasses">
+			<list>
+				<value>org.springframework.util.StringUtils</value>
+				<value>org.riotfamily.common.util.FormatUtils</value>
+				<value>org.riotfamily.common.web.support.ServletUtils</value>
+			</list>
+		</property>
+		<property name="whitespaceStripping" value="true" />
+		<property name="exceptionHandler">
+			<bean class="org.riotfamily.core.view.RiotTemplateExceptionHandler" />
+		</property>
+	</bean>
+	
+    <bean id="viewResolver" class="org.riotfamily.common.web.mvc.view.RiotFreeMarkerViewResolver">
+		<property name="exposeRequestAttributes" value="true" />
+	</bean>
+
+	<bean id="commonMacroHelper" class="org.riotfamily.common.web.macro.CommonMacroHelperFactory">
+		<property name="stamper" ref="resourceStamper" />
+		<property name="handlerUrlResolver" ref="handlerUrlResolver" />
+		<property name="compressResources" value="${riot.resources.compress=true}" />
+	</bean>
+		
+	<bean id="templateMacroHelper" class="org.riotfamily.common.web.template.TemplateMacroHelperFactory" />
+	
+	<bean class="org.riotfamily.common.web.mvc.scope.FlashModelExposer" />
+		
+	<!-- Security -->
+
+	<bean id="securityContextInterceptor" class="org.riotfamily.core.security.session.SecurityContextInterceptor" />
+	
+	<bean id="loginFilterPlugin" class="org.riotfamily.core.security.session.LoginRequestInterceptor">
+		<description>
+			FilterPlugin that ensures that only authenticated users can
+	  		access the Riot admin pages.
+		</description>
+		<property name="loginHandlerName">
+			<idref bean="loginFormController"/>
+		</property>
+		<property name="excludes">
+			<list>
+				<value>/login</value>
+				<value>/logout</value>
+				<value>/resources/**</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.riotfamily.core.security.session.RiotUserDaoProcessor">
+		<description>
+			BeanPostProcessor that wraps all RiotUserDao beans		
+		</description>
+	</bean>
+		
+	<bean id="authenticationService" class="org.riotfamily.core.security.auth.UserDaoAuthenticationService">
+		<description>
+			A RiotUserDao-based AuthenticationService		
+		</description>
+	 	<property name="userDao" ref="riotUserDao" />
+	</bean>
+	
+	<bean id="riotUserDao" class="org.riotfamily.core.security.auth.HibernateUserDao">
+		<constructor-arg ref="sessionFactory" />
+		<property name="entityClass" value="org.riotfamily.core.security.auth.User" />
+	</bean>
+	
+	<bean id="sessionMetaDataStore" class="org.riotfamily.core.security.session.PersistentSessionMetaDataStore">
+		<description>
+			Persistence service for SessionMetaData (last login date, last IP, etc.)		
+		</description>
+	</bean>
+
+	<bean id="loginManager" class="org.riotfamily.core.security.session.LoginManager">
+		<constructor-arg ref="authenticationService" />
+		<property name="metaDataStore" ref="sessionMetaDataStore" />
+	</bean>
+	
+	<bean class="org.riotfamily.core.security.AccessControlInitializer" />
+
+    <bean id="loggingPolicy" class="org.riotfamily.core.security.policy.LoggingPolicy" />
+
+	<bean id="defaultPolicy" class="org.riotfamily.core.security.policy.GrantAllPolicy" />
+	
+	<bean id="loginFormController" name="/login" class="org.riotfamily.core.security.ui.LoginFormController">
+		<description>
+			Controller that displays the login form and passes the user input to the LoginManager.		
+		</description>
+		<constructor-arg ref="loginManager" />
+	</bean>
+	
+	<bean name="/ping" class="org.riotfamily.common.web.controller.SessionKeepAliveController">
+		<description>
+			Controller that keeps the HTTP session alive.		
+		</description>
+	</bean>	
+	
+	<bean id="logoutController" name="/logout" class="org.riotfamily.core.security.ui.LogoutController">
+		<description>
+			Controller that performs a logout.		
+		</description>
+		<property name="servletPrefix">
+			<ref bean="riotServletPrefix" />
+		</property>
+	</bean>
+	
+	<bean id="changePasswordController" name="/changePassword" class="org.riotfamily.core.security.ui.ChangePasswordController">		
+		<constructor-arg ref="formContextFactory" />
+		<constructor-arg ref="riotUserDao" />
+		<constructor-arg ref="transactionManager" />
+	</bean>
+	
+	<!-- Root group screen -->
+	
+	<bean id="home" class="org.riotfamily.core.screen.GroupScreen">
+		<property name="icon" value="house" />
+		<property name="childScreens" ref="rootScreens" />
+		<property name="screenlets">
+			<list>
+				<bean class="org.riotfamily.core.screenlet.LoginStatusScreenlet" />
+			</list>
+		</property>
+	</bean>
+	
+	<util:list id="rootScreens">
+		<bean id="systemPreferences" class="org.riotfamily.core.screen.GroupScreen">
+			<property name="icon" value="wrench" />
+			<property name="childScreens" ref="systemScreens" />
+		</bean>
+	</util:list>
+	
+	<util:list id="systemScreens">
+	</util:list>
+		
+	<bean id="screenRepository" class="org.riotfamily.core.screen.ScreenRepository">
+		<property name="rootScreen" ref="home" />
+	</bean>
+	
+	<bean id="listService" class="org.riotfamily.core.screen.list.service.ListService">
+		<constructor-arg ref="transactionManager" />
+		<constructor-arg ref="screenRepository" />
+		<constructor-arg ref="formContextFactory" />
+		<constructor-arg ref="handlerUrlResolver" />
+		<constructor-arg ref="resourcePath" />
+	</bean>
+	
+	<dwr:annotation-scan scanRemoteProxy="false" base-package="org.riotfamily.core.screen.list" />
+	
+	<!-- Form screens -->
+	
+	<bean id="formRepository" class="org.riotfamily.forms.factory.xml.XmlFormRepository" primary="true">
+		<property name="priorityConfigLocations">
+			<list>
+				<value>classpath:/org/riotfamily/core/runtime/forms.xml</value>
+				<value>/WEB-INF/forms.xml</value>
+			</list>
+		</property>
+		<property name="mimetypesMap" ref="fileTypeMap" />
+		<property name="tinyMCEProfiles" ref="tinyMCEProfiles" />
+		<property name="customElements" ref="customFormElements" />
+	</bean>
+	
+	<bean id="formContextFactory" class="org.riotfamily.forms.controller.FormContextFactory">
+		<property name="messageCodesResolver" ref="messageCodesResolver" />
+		<property name="resourcePath" ref="resourcePath" />
+	</bean>
+	
+	<bean id="imageCropper" class="org.riotfamily.media.processing.ImageMagickCropper">
+		<constructor-arg ref="imageMagick" />
+	</bean>
+	
+	<util:map id="defaultTinyMCEConfig">
+		<entry key="menubar">
+			<value type="java.lang.Boolean">false</value>
+		</entry>
+		<entry key="statusbar">
+			<value type="java.lang.Boolean">false</value>
+		</entry>
+		<entry key="toolbar" value="undo redo | bold italic superscript | bullist numlist | outdent indent hr | link unlink anchor | charmap code" />
+		<entry key="valid_elements" value="+a[href|target|name],strong,em,h3/h2/h1,h4/h5/h6,p,br,hr,ul,ol,li,blockquote,sub,sup,span[class&lt;mailto]" />
+		<entry key="forced_root_block" value="p" />
+		<entry key="entity_encoding" value="raw" />
+		<entry key="browser_spellcheck">
+			<value type="java.lang.Boolean">true</value>
+		</entry>
+		<entry key="plugins" value="link,hr,anchor,charmap,code" />
+	</util:map>
+	
+	<util:map id="tinyMCEProfiles">
+		<entry key="default" value-ref="defaultTinyMCEConfig" />
+	</util:map>
+	
+	<util:map id="customFormElements">
+		<entry key="{http://www.riotfamily.org/schema/core/form-elements}chooser"
+				value="org.riotfamily.core.form.element.ObjectChooser" />
+				
+		<entry key="{http://www.riotfamily.org/schema/core/form-elements}restricted"
+				value="org.riotfamily.core.form.element.RestrictedElement" />
+	</util:map>
+	
+	<!-- Dialog commands -->
+	
+	<bean id="commandDialogController" name="/dialog/{formKey}" 
+			class="org.riotfamily.core.screen.list.command.impl.dialog.DialogFormController">
+		<constructor-arg ref="formContextFactory" />
+	</bean>
+		
+	<!--  Resources -->
+	
+	<util:list id="resourceFilters">
+		<bean class="org.riotfamily.core.resource.PropertyResourceFilter">
+			<property name="match" value="/**/*.css" />
+			<property name="properties" ref="cssProperties" />
+		</bean>
+	</util:list>
+	
+	<util:map id="cssProperties">
+		<entry key="resourcePath" value-ref="resourcePath" />
+	</util:map>
+	
+	<util:list id="resourceMappings">
+		<!-- Allow any resource to be overwritten in WEB-INF/resources -->
+		<bean class="org.riotfamily.core.resource.ResourceMapping">
+			<property name="path" value="/" />
+			<property name="location" value="/WEB-INF/resources/" />
+		</bean>
+		<!-- Riot core resources -->
+		<bean class="org.riotfamily.core.resource.ResourceMapping">
+			<property name="path" value="/" />
+			<property name="location" value="classpath:/org/riotfamily/core/runtime/resources/" />
+		</bean>
+		<!-- Resources from the jslib jars -->
+		<bean class="org.riotfamily.core.resource.ResourceMapping">
+			<property name="path" value="/" />
+			<property name="location" value="classpath:/org/riotfamily/resources/" />
+		</bean>
+		<!-- Form resources -->
+		<bean class="org.riotfamily.core.resource.ResourceMapping">
+			<property name="path" value="/form/" />
+			<property name="location" value="classpath:/org/riotfamily/forms/runtime/resources/" />
+		</bean>
+	</util:list>
+	
+	<bean id="resourceController" name="/resources/{version}/**" class="org.riotfamily.core.resource.ResourceController">
+		<property name="fileTypeMap" ref="fileTypeMap" />
+		<property name="filters" ref="resourceFilters" />
+		<property name="mappings" ref="resourceMappings" />
+		<property name="compressors">
+			<map>
+				<entry key="text/css">
+					<bean class="org.riotfamily.common.web.performance.YUICssCompressor">
+						<property name="enabled" value="${riot.resources.compress=true}" />
+					</bean>
+				</entry>
+				<entry key="text/javascript" value-ref="javaScriptCompressor" />
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="minifyScriptController" name="/resources/{version}/joined.js" class="org.riotfamily.common.web.performance.MinifyScriptController">
+		<description>
+			Controller to compress (minify) JavaScript files.
+		</description>
+		<constructor-arg ref="javaScriptCompressor" />
+	</bean>
+	
+	<bean id="minifyCssController" name="/resources/{version}/joined.css" class="org.riotfamily.common.web.performance.MinifyCssController">
+		<description>
+			Controller to compress (minify) CSS files.
+		</description>
+		<constructor-arg>
+			<bean class="org.riotfamily.common.web.performance.YUICssCompressor">
+				<property name="enabled" value="${riot.resources.compress=true}" />
+			</bean>
+		</constructor-arg>
+	</bean>
+	
+	<!-- Misc -->
+
+	<util:list id="customStyleSheets">
+		<value>style/command.css</value>
+		<value>style/command-custom.css</value>
+	</util:list>
+	
+	<bean id="riotDaoOptionValuesAdapter" class="org.riotfamily.core.form.options.RiotDaoOptionsModelAdapter" />
+		
+	<bean id="messageCodeRevelationController" name="/toggle-i18n" class="org.riotfamily.common.i18n.MessageCodeRevelationController" />
+  
+	<!--
+	<bean id="org.directwebremoting.PageNormalizer"
+		class="org.riotfamily.common.web.dwr.NoOpPageNormalizer" />
+ 	-->
+ 	
+</beans>

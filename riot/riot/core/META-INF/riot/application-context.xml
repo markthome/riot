@@ -1,0 +1,118 @@
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context         
+ 		http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<description>
+		Root application context (Riot Core)
+	</description>
+	
+	<context:annotation-config />
+	<tx:annotation-driven />
+
+	<bean id="configurer" class="org.riotfamily.common.beans.config.ProfileConfigurer">
+		<description>
+			Configurer that fills in placeholders from application.properties
+		</description>
+		<property name="ignoreResourceNotFound" value="true" />
+	</bean>
+	
+	<bean id="fileTypeMap" class="org.riotfamily.common.io.MimetypesFileTypeMapFactoryBean">
+		<description>
+			FileTypeMap that includes some important web-related mime-types
+			which are missing in the default map.		
+		</description>
+		<property name="types">
+			<list>
+				<value>text/css css</value>
+				<value>text/xml xml</value>
+				<value>text/javascript js</value>
+				<value>image/png png</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Riot Runtime -->
+		
+	<bean id="riotRuntime" class="org.riotfamily.core.runtime.RiotRuntime">
+		<property name="resourceMapping" value="/resources" />
+	</bean>
+	<bean id="riotServletPrefix" factory-bean="riotRuntime" factory-method="getServletPrefix" />
+	<bean id="resourcePath" factory-bean="riotRuntime" factory-method="getResourcePath" />
+	<bean id="riotVersion" factory-bean="riotRuntime" factory-method="getRiotVersion" />
+		
+	<!-- ImageMagick -->
+	
+	<bean id="imageMagick" class="org.riotfamily.media.processing.ImageMagick">
+		<description>
+			ImageMagick 'convert' command which is used to crop images.
+			
+			SETUP NOTE:
+			===========
+			
+			If the 'convert' binary is in your PATH you don't have to configure
+			anything. If not, you have to specify the location of your 
+			ImageMagick installation.
+			
+			If you used an installer, chances are good that the MAGICK_HOME
+			environment variable is set (in this case you also don't need to 
+			configure anything).
+			
+			If not, please set the location via the imageMagick.home property
+			in your application.properties file.
+			
+			For backwards compatibility you may also set the 
+			imageMagick.convertCommand property, but remember that you also have
+			to specify imageMagick.identifyCommand (which is used to extract
+			meta data).
+		</description>
+		<property name="magickHome" value="${imageMagick.home=}" />
+		<property name="command" value="${imageMagick.convertCommand=}" />
+	</bean>
+	
+	<!--  Scheduling -->
+	
+	<bean id="startupTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<description>
+			Quartz trigger that fires at startup.
+		</description>
+		<property name="name" value="startup" />
+		<property name="repeatCount" value="0" />
+		<property name="startDelay" value="0" />
+	</bean>
+	
+	<bean id="minutelyTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<description>
+			Quartz trigger that fires every minute.
+		</description>
+		<property name="name" value="minutely" />
+		<property name="cronExpression" value="0 * * * * ?" />
+	</bean>
+	
+	<bean id="dailyTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<description>
+			Quartz trigger that fires once a day at 3:00 AM.
+		</description>
+		<property name="name" value="daily" />
+		<property name="cronExpression" value="0 0 3 * * ?" />
+	</bean>
+	
+	<bean id="hourlyTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<description>
+			Quartz trigger that fires every hour.
+		</description>
+		<property name="name" value="hourly" />
+		<property name="cronExpression" value="0 0 * * * ?" />
+	</bean>	
+	
+	<bean id="riotTaskScheduler" class="org.riotfamily.common.scheduling.ScheduledTaskSchedulerFactoryBean" />
+	
+</beans>

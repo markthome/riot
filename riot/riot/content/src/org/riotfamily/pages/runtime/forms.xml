@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form-config
+	xmlns="http://www.riotfamily.org/schema/forms/form-config"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.riotfamily.org/schema/forms/form-config
+		http://www.riotfamily.org/schema/forms/form-config-9.3.xsd">
+
+	<form id="site" bean-class="org.riotfamily.pages.model.Site"
+			initializer="siteFormInitializer">
+			
+		<textfield bind="name" max-length="255" />
+		<editable-if-new>
+			<selectbox bind="schemaName" value-property="name" label-property="label" required="true">
+				<options ref="sitemapSchemaRepository" />
+			</selectbox>
+		</editable-if-new>
+		<textfield bind="locale" required="true" />
+		<textfield bind="hostName" />
+		<checkbox bind="enabled" default="checked" />
+		<list bind="aliases" sortable="false">
+			<textfield />
+		</list>
+	</form>
+	
+	<form id="page" bean-class="org.riotfamily.pages.model.ContentPage"
+			initializer="pageFormInitializer">
+	</form>
+
+	<form id="riotUser" bean-class="org.riotfamily.pages.riot.security.SiteUser">
+		<group>
+			<editable-if-new>
+				<textfield bind="id" required="true" />
+			</editable-if-new>
+			<textfield bind="name" />
+			<textfield bind="email" />
+		</group>
+		<group>
+			<passwordfield bind="newPassword" confirm="true"/>
+		</group>
+		<checkbox-group bind="sites" label-property="name" collection-class="java.util.HashSet">
+			<options ref="siteRiotDao" />			
+		</checkbox-group>
+	</form>
+
+</form-config>

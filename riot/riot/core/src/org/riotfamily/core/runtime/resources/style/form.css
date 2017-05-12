@@ -1,0 +1,651 @@
+.extra .box .links a {
+	margin-left: 13px;
+	padding: 2px 0 2px 24px;
+	display: block;
+}
+
+.commands .saveButton {
+	background-image: url(images/icons/save.png);
+	_background-image: none;
+	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${contextPath}${resourcePath}/style/images/icons/save.png', sizingMethod='crop')
+}
+
+#form-options,
+#message {
+	background-color: #ebebeb;
+	padding: 20px 10px 20px 36px;
+	margin-bottom: 50px;
+}
+
+#form-options form {
+	margin-top: 10px;
+}
+
+.main .buttons {
+	clear: both;
+	margin-bottom: 30px;
+	text-align: right;
+	display: none;
+}
+
+.riot-dialog form {
+	margin: 0;
+	padding: 20px;
+}
+
+.buttons {
+	text-align: right;
+}
+
+.buttons span {
+	display: inline-block;
+	display: -moz-inline-stack;
+	_display: inline-block;
+	height: 32px;
+	background: url(images/button_bg.gif) 0 -32px repeat-x;
+}
+
+.buttons input {
+	background: url(images/button_bg.gif) repeat-x;
+	border: 0;
+	font-family: Arial;
+	font-size: 11px;
+	height: 32px;
+	padding: 0 20px;
+	margin: 0 1px;
+}
+
+
+#saving {
+	margin-left: 32px;
+}
+
+div.form-error,
+label.error {
+	color: #ef3b40;
+}
+div.form-error {
+	margin:15px 0;
+}
+
+ul.errors {
+	padding-left: 0;
+	margin: 0;
+}
+ul.errors li {
+	margin: 5px 0;
+	list-style-type: none;
+	color: #ef3b40;
+	font-weight: normal;
+}
+
+label {
+	font-size: 13px;
+	font-weight: bold;
+	-moz-user-select: none;
+	vertical-align: middle;
+}
+.title {
+	margin-bottom:4px;
+}
+label.disabled,
+.disabled label,
+.disabled div.title label {
+	color: #888;
+}
+.composite-element {
+	border-top: 1px solid #dadada; 
+}
+
+.element {
+	margin-bottom: 30px;
+}
+.collectionEditor .element {
+	margin-bottom: 0;
+}
+.collectionEditor .nestedForm .element {
+	margin-bottom: 20px;
+}
+.element-switch {
+	margin-bottom: 12px;
+}
+input {
+	color: #3d3d3d;
+}
+
+textarea, input.text, input.number, input.password, select, option {
+	font-family: arial, sans-serif;
+	font-size: 11px;
+}
+textarea, input.text, input.number, input.password {
+	padding: 4px 0;
+}
+textarea, input.text, input.number, input.password {
+	display: block;
+}
+
+textarea.disabled, 
+input.disabled {
+	color: #999;
+	background-color: #ebebeb;
+}
+.disabled input.button {
+	color: graytext;
+}
+select.disabled {
+	color: graytext;
+}
+
+textarea, input.text, input.password {
+	width: 100%;
+}
+
+input.number {
+	width: auto;
+}
+input.text, input.number, input.password {
+	_height: 16px;
+	_overflow: visible;
+}
+
+span.read-only {
+	line-height: 26px;
+}
+
+div.tinymce-disabled {
+	font-family: verdana, arial, sans-serif;
+	font-size: 10px;
+	padding: 24px 0 4px 0;
+	color: #3d3d3d;
+	background-color: ButtonFace;
+	border: 1px solid #e0e0e0;
+}
+div.tinymce-disabled a {
+	color: #3d3d3d;
+}
+
+#elements,
+.textarea-container {
+	_height: 1px;
+}
+textarea {
+	line-height: 18px;
+	margin: 0px;
+}
+.counter {
+	display:inline;
+	float:right;
+	margin:-1px -2px 10px 0;
+	padding:0 4px;
+	color:#3d3d3d;
+	font-size:11px;
+	background-color:#ebebeb;
+}
+
+textarea,
+input.text,
+input.number,
+input.password{
+	border: 1px solid #e0e0e0;
+}
+
+.spinButtons div {
+	width: 13px;
+}
+.spinButtons .increase {
+	background: #ebebeb url(images/up.gif) 0px center no-repeat;
+}
+.spinButtons .decrease {
+	background: #ebebeb url(images/down.gif) 0px center no-repeat;
+}
+.spinButtons .increase:hover,
+.spinButtons .decrease:hover {
+	background-color: #8eb5e5;
+	background-position: -13px center;
+}
+
+div.number {
+	overflow: hidden;
+}
+.number input.number {
+	float: left;
+}
+.number .unit {
+	overflow: hidden;
+	padding: 5px 0 0 7px;
+	font-size: 12px;
+	color: #3d3d3d;
+}
+.numberInput .unit {
+	float: left;
+}
+
+select {
+	margin: 0;
+}
+
+div.checkbox,
+div.checkbox-element,
+.checkbox-pageProperty {
+	position: relative;
+	_height: 1px;
+}
+div.checkbox label,
+div.checkbox-element label,
+.checkbox-pageProperty label {
+	padding-left: 20px;
+}
+
+.checkbox-wrapper {
+	position: absolute;
+	top: 0;
+}
+input.checkbox {
+	margin: 0;
+}
+ul.checkboxGroup li,
+ul.radioButtonGroup li {
+	margin: 6px 0 0 0;
+}
+
+ul.checkboxGroup input,
+ul.radioButtonGroup input {
+	margin: 0 2px 2px 0;
+	vertical-align: middle;
+}
+
+ul.checkboxGroup label {
+	font-size: 11px;
+	font-weight: normal;
+}
+
+.indent {
+	padding-top: 20px;
+}
+.indent .indent {
+	padding-top: 0;
+}
+.indent label {
+	font-weight: bold;
+}
+
+.collectionEditor {
+	overflow: hidden;
+}
+.collectionEditor ul.items {
+	padding: 0;
+	margin: 0;
+}
+.collectionEditor span .button-add {
+	margin-left: 17px;
+}
+.collectionEditor ul.drag-drop {
+	background-color: #a4a4a4;
+}
+
+.collectionEditor li.item {
+	list-style-type: none;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	background-color: #fff;
+	xborder-bottom: 1px solid #ebebeb;
+	vertical-align: top; 
+}
+
+.collectionEditor table {
+	border-collapse: collapse;
+}
+
+.collectionEditor table.item {
+	width: 100%;
+	border-spacing: 0;
+	margin-bottom: 1px;
+}
+table.item td {
+	padding: 0;
+	margin: 0;
+	vertical-align: top;
+}
+
+table.item td.handle {
+	vertical-align: middle;
+	padding: 0px 5px;
+	background: #f6f6f6 url(images/form/drag_handle_bg.jpg) 0 0 repeat-x;
+	background-size: 100% 100%;
+	-moz-background-size: 100% 100%;
+	-webkit-background-size: 100% 100%; 
+}
+
+table.item td.handle div {
+	width: 7px;
+	height: 19px;
+	background: url(images/form/move_ns.gif) center center no-repeat;
+}
+table.item td.itemElement {
+	width: 100%;
+	padding: 10px 2px 10px 10px;
+	background: url(images/form/list_item_bg_left.jpg) repeat-y;
+}
+.mapEditor table.item td.itemElement {
+	padding: 10px 0;
+}
+
+table.item .draggable td.itemElement {
+	padding-right: 0;
+}
+.itemElement .indent {
+	padding-top: 10px;
+}
+
+table.item td.removeButton {
+	background: url(images/form/list_item_bg_right.jpg) repeat-y;
+	vertical-align: middle;
+}
+.listEditor ul.items {
+		border-left: 1px solid #dadada;
+		border-right: 1px solid #dadada;
+}
+.listEditor li.item {
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #dadada;
+    xmargin-bottom: 1px;
+}
+.listEditor td.down {
+    vertical-align: bottom;
+}
+.listEditor td.up div,
+.listEditor td.down div {
+    width: 32px;
+    height: 16px;
+    background-color: #ebebeb;
+    background-repeat: no-repeat;
+    background-position: 0 center;
+    overflow: hidden;
+}
+.listEditor td.hover div {
+    color: #fff;
+    background-color: #8eb5e5;
+    background-position: -32px center;
+}
+
+.listEditor td.up div {
+    border-bottom: 1px solid #fff;
+    background-image: url(images/list_up.gif);
+}
+.listEditor td.down div {
+    border-top: 1px solid #fff;
+    background-image: url(images/list_down.gif);
+}
+.listEditor td.button div.disabled {
+    background-color: #ebebeb;
+    background-position: -64px center;
+}
+.listEditor input.remove {
+    height: 32px;
+    background-position: -32px center;
+    background-image: url(images/list_remove.gif);
+}
+
+
+.addKey {
+	background: url(images/add_grey.gif) 10px 12px no-repeat;
+	padding: 10px 0 0 42px;
+}
+
+.addKey input {
+	width: auto;
+	display: inline;
+}
+
+table.item .indent {
+	margin: 0;
+}
+
+.listEditor .button-add,
+.collectionEditor .button-remove {
+	margin: 0;
+	border: 0;
+	padding: 0;
+	width: 32px;
+	height: 32px;
+	display: block;
+	overflow: hidden;
+	text-indent: -9999em;
+	padding-left: 256px;	
+    -moz-padding-start: 0;
+    -webkit-padding-start: 0;	
+}
+
+.listEditor .button-add {
+	background: transparent url(images/form/list_item_add.gif) no-repeat;
+	width: 38px;
+	height: 23px;
+}
+
+.collectionEditor .button-remove {
+	background: transparent url(images/form/list_item_remove.gif) center center no-repeat;
+}
+
+.calendar-button {
+	width: 23px;
+	height: 24px;
+	padding: 0;
+	*margin-top: 1px;
+	overflow: hidden;
+	vertical-align: top;
+	background: url(images/calendar.gif) no-repeat center center;
+	display: -moz-inline-stack;
+	display: inline-block;
+}
+#elements input.calendar-input,
+#elements input.color-input {
+	width: 114px;
+	display: inline;
+	margin-right: 5px;
+}
+button.color-swatch {
+	width: 26px;
+	height: 26px;
+	overflow: hidden;
+	padding: 0;
+	border: 1px solid #3d3d3d;
+	vertical-align: top;
+}
+ul.checkboxGroup,
+ul.radioButtonGroup {
+	padding: 0;
+	margin: 20px 0 30px 0;
+}
+.checkboxGroup li,
+.radioButtonGroup li {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+.imageCheckboxGroup input.checkbox {
+	display: none;
+}
+
+.imageCheckbox {
+	width: 14px;
+	height: 14px;
+	margin-top: 5px;
+}
+
+.imageCheckbox div {
+	width: 14px;
+	height: 14px;
+	background: url(images/image_checkbox.gif) center center no-repeat;
+}
+.imageCheckbox.checked div {
+	background-image: url(images/image_checkbox_checked.gif);
+}
+
+.imageRadioButtonGroup input.radio {
+	display: none;
+}
+
+.chooser .label {
+	padding-right: 10px;
+}
+.chooser img {
+	vertical-align: middle;
+}
+
+.confirm-text p,
+.password p {
+	display: block;
+	margin: 10px 0 5px 0;
+}
+.password .button-change {
+	margin-top: 5px; 
+}
+.password .button-keep {
+	margin: 5px 0 10px 0;
+}
+.password .strength {
+	margin-top: 5px;
+}
+.password .strength .weak {
+	color: #cb0038;
+}
+.password .strength .fair {
+	color: #f57900;
+}
+.password .strength .strong {
+	color: #73d216;
+}
+.toggle-plaintext {
+	margin-top: 15px;
+}
+.toggle-plaintext input {
+	vertical-align: middle;
+}
+.toggle-plaintext label {
+	font-weight: normal;
+	vertical-align: middle;
+}
+
+.hint-trigger {
+	display: inline;
+	padding-left: 14px;
+	height: 14px;
+	cursor: help;
+	background: url(images/form/hint.gif) left center no-repeat;
+	vertical-align: middle;
+	position: relative;
+}
+
+.hint {
+	display: none;
+	background-color: #ebebeb;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+div.form-hint {
+	background: url(images/hint.gif) 0 2px no-repeat;
+	padding-left: 20px;
+	margin-bottom: 30px;
+}
+
+div.autocomplete {
+	position: absolute;
+	width: 250px;
+	border: 1px solid #a4a4a4;
+	margin: 0;
+	padding: 0;
+	z-index: 1;
+}
+div.autocomplete ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	background-color: #fff;
+}
+div.autocomplete ul li {
+	list-style-type: none;
+	display: block;
+	padding: 2px;
+	cursor: pointer;
+	font-size: 12px;
+}
+div.autocomplete ul li.selected {
+	background-color: #ffb;
+}
+
+.uploadProgress {
+	margin-bottom: 3px;
+}
+
+.uploadProgress .gauge {
+	width: 150px;
+	height: 19px;
+	background: url(images/progress.gif) #ebebeb;
+	float: left;
+	margin-right: 12px;
+}
+
+.uploadProgress .gauge .bar {
+	background-color: #8eb5e5;
+	background-image: url(images/progress.gif);
+	height: 100%;
+}
+
+.uploadProgress .stats {
+	position: relative;
+	top: 4px;
+}
+
+.filePreview {
+	margin: 10px 0;
+	overflow:hidden;
+}
+
+.filePreview .fileInfo {
+	margin-bottom: 10px;
+}
+.filePreview .fileInfo td {
+	padding: 0px;
+}
+.filePreview .fileInfo td.label {
+	font-weight: bold;
+	padding: 0 4px 0 0;
+	width: auto;
+	text-align: right;
+}
+
+.filePreview .download,
+.filePreview .view,
+.filePreview .hide {
+	width: 32px;
+	height: 32px;
+	float: left;
+	display: block;
+	margin: 1px 4px 0 1px;
+}
+.filePreview .download {
+	background: url(images/download.gif) no-repeat;
+}
+.filePreview .view {
+	background: url(images/view.gif) no-repeat;
+}
+.filePreview .hide {
+	background: url(images/hide-view.gif) no-repeat;
+}
+
+.button-expand,
+.button-collapse,
+.button-set,
+.button-remove {
+	margin-top: 10px;
+} 
+.change-password .buttons {
+	display: block;
+}
+.change-password {
+	margin:0;
+	padding: 25px 0 0 25px;
+    width: 545px;
+}

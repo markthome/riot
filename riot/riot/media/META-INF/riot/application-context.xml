@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:override="http://www.riotfamily.org/schema/common/override"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util-4.3.xsd
+		http://www.riotfamily.org/schema/common/override
+		http://www.riotfamily.org/schema/common/override-9.3.xsd">
+	
+	<bean id="fileStore" class="org.riotfamily.media.store.DefaultFileStore">
+		<property name="uriPrefix" value="${riot.media.uriPrefix=/media}" />
+		<property name="storagePath" value="${riot.media.storagePath=}" />
+	</bean>
+		
+	<bean id="imageMagickIdentify" class="org.riotfamily.media.meta.ImageMagickIdentify">
+		<description>
+			ImageMagick 'identify' command which is used to extract meta data from images.
+			
+			SETUP NOTE:
+			===========
+			
+			If the 'identify' binary is in your PATH you don't have to configure
+			anything. If not, you have to specify the location of your 
+			ImageMagick installation.
+			
+			If you used an installer, chances are good that the MAGICK_HOME
+			environment variable is set (in this case you also don't need to 
+			configure anything).
+			
+			If not, please set the location via the imageMagick.home property
+			in your application.properties file.
+			
+			For backwards compatibility you may also set the 
+			imageMagick.identifyCommand property, but remember that you also have
+			to specify imageMagick.convertCommand (which is used to crop images).
+		</description>
+		<property name="magickHome" value="${imageMagick.home=}" />
+		<property name="command" value="${imageMagick.identifyCommand=}" />
+	</bean>
+	
+	<bean id="ffmpeg" class="org.riotfamily.media.processing.FFmpeg" />
+	
+	<bean id="mediaService" class="org.riotfamily.media.meta.MediaService">
+		<constructor-arg ref="fileStore" />
+		<constructor-arg ref="fileTypeMap" />
+		<constructor-arg ref="imageMagickIdentify" />
+		<constructor-arg ref="ffmpeg" />
+	</bean>
+	
+	<bean id="mediaCleanUp" class="org.riotfamily.media.cleanup.HibernateCleanUpTask">
+		<constructor-arg ref="sessionFactory" />
+		<constructor-arg ref="fileStore" />
+		<constructor-arg ref="transactionManager" />
+		<property name="triggerNames" value="${riot.media.cleanUp.schedule=startup,daily}" />
+		<property name="deleteOrphanedFiles" value="${riot.media.cleanUp.deleteOrphanedFiles=true}" />
+		<property name="deleteUnmanagedFiles" value="${riot.media.cleanUp.deleteUnmanagedFiles=true}" />
+	</bean>
+	
+	<bean class="org.riotfamily.media.model.RiotFile" scope="prototype">
+		<property name="mediaService" ref="mediaService" />
+	</bean>
+	
+</beans>

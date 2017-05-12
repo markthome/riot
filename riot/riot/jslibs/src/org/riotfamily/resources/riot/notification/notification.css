@@ -1,0 +1,73 @@
+#riot-notifications {
+	position: fixed;
+	_position: absolute;
+	bottom: 10px;
+	right: 10px;
+	z-index: 99;
+}
+.notification .c {
+	width: 200px;
+}
+
+.notification .l {
+	width: 22px;
+}
+
+.notification .r {
+	width: 32px;
+}
+
+.notification .t td {
+	height: 22px;
+}
+
+.notification .b td {
+	height: 31px;
+}
+
+.notification .t .l {
+	background-image: url(images/tl.png);
+}
+.notification .t .c {
+	background-image: url(images/tc.png);
+}
+.notification .t .r {
+	background-image: url(images/tr.png);
+}
+.notification .m .l {
+	background-image: url(images/ml.png);
+}
+.notification .m .c {
+	background-image: url(images/mc.png);
+}
+.notification .m .r {
+	background-image: url(images/mr.png);
+}
+.notification .b .l {
+	background-image: url(images/bl.png);
+}
+.notification .b .c {
+	background-image: url(images/bc.png);
+}
+.notification .b .r {
+	background-image: url(images/br.png);
+}
+
+.notification .icon {
+	width: 22px;
+	background-position: 0 2px;
+	background-repeat: no-repeat;
+	vertical-align: top;
+}
+
+.notification .text {
+	color: #fff;
+	font-size: 10pt;
+	font-family: arial;
+	text-shadow: #000 2px 2px 2px;
+}
+
+.notification .title {
+	font-size: 11pt;
+	font-weight: bold;
+}

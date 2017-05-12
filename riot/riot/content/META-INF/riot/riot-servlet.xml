@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:s="http://www.riotfamily.org/schema/core/screen"
+	xmlns:override="http://www.riotfamily.org/schema/common/override"
+	xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util-4.3.xsd
+		http://www.riotfamily.org/schema/core/screen
+		http://www.riotfamily.org/schema/core/screen-9.3.xsd
+		http://www.riotfamily.org/schema/common/override
+		http://www.riotfamily.org/schema/common/override-9.3.xsd
+		http://www.directwebremoting.org/schema/spring-dwr
+    	http://www.directwebremoting.org/schema/spring-dwr-3.0.xsd">
+	
+	<bean id="editModeRenderStrategy" class="org.riotfamily.components.render.list.EditModeRenderStrategy">
+		<constructor-arg ref="viewComponentRenderer" />
+		<constructor-arg ref="componentMetaDataProvider" />
+		<constructor-arg ref="contentFormRepository" />
+		<constructor-arg ref="componentListRenderer" />
+	</bean>
+			
+	<!--
+	  - Service bean to edit components. Exposed via DWR.
+	  -->
+	<bean id="componentEditor" class="org.riotfamily.components.editor.ComponentEditorImpl">
+		<constructor-arg ref="viewComponentRenderer" />
+		<constructor-arg ref="componentMetaDataProvider" />
+		<constructor-arg ref="contentFormRepository" />
+		<property name="tinyMCEProfiles" ref="tinyMCEProfiles" />
+	</bean>
+	
+	<dwr:annotation-scan scanRemoteProxy="false" base-package="org.riotfamily.components" />
+	
+	<!--
+	  - FormRepository providing component property forms.
+	  -->
+	<bean id="contentFormRepository" class="org.riotfamily.components.config.ContentFormRepository">
+		<property name="configLocations">
+		    <list>
+		        <value>/WEB-INF/content-forms.xml</value>
+		    </list>
+		</property>
+		<property name="customElements" ref="customFormElements" />
+		<property name="mimetypesMap" ref="fileTypeMap" />
+		<property name="tinyMCEProfiles" ref="tinyMCEProfiles" />
+	</bean>
+
+	<!--
+	  - Controller that renders forms to edit component properties.
+	  -->
+	<bean id="componentFormController"
+		name="/components/form/{contentId}/**"
+		class="org.riotfamily.components.riot.form.ContentFormController">
+		<constructor-arg ref="formContextFactory" />
+		<constructor-arg ref="contentFormRepository" />
+		<constructor-arg ref="transactionManager" />
+	</bean>
+	
+	<bean name="/components/publish"
+		class="org.springframework.web.servlet.mvc.ParameterizableViewController">
+		<property name="viewName" value="classpath:/org/riotfamily/components/runtime/view/publish-frameset.ftl" />
+	</bean>
+	
+	<bean name="/components/publish-toolbar"
+		class="org.springframework.web.servlet.mvc.ParameterizableViewController">
+		<property name="viewName" value="classpath:/org/riotfamily/components/runtime/view/publish-toolbar.ftl" />
+	</bean>
+	
+	<!--
+	  - Login-popup that is opend by the Riot-login bookmarklet.
+	  -->
+	<bean id="toolbarLoginFormController"
+		name="/pages/login"
+		class="org.riotfamily.core.security.ui.LoginFormController">
+		<constructor-arg ref="loginManager" />
+		<property name="successViewName" value="classpath:/org/riotfamily/components/runtime/view/toolbar-login-success.ftl" />
+	</bean>
+		
+	<!-- Overrides -->
+
+	<override:add ref="messageBasenames" append="true">
+		<value>classpath:/org/riotfamily/components/runtime/i18n/messages</value>
+		<value>classpath:/org/riotfamily/pages/runtime/i18n/messages</value>
+	</override:add>
+
+	<override:add ref="loginFilterPlugin" property="excludes">
+		<value>/pages/login</value>
+	</override:add>
+	
+	<override:add ref="resourceFilters">
+		<bean class="org.riotfamily.core.resource.PropertyResourceFilter">
+			<property name="match" value="/**/toolbar-loader.js" />
+			<property name="properties">
+				<map>
+					<entry key="riotServletPrefix" value-ref="riotServletPrefix" />
+					<entry key="riotVersion" value-ref="riotVersion" />
+					<entry key="resourcePath" value-ref="resourcePath" />
+				</map>
+			</property>
+		</bean>
+		<bean class="org.riotfamily.core.resource.MessageResourceFilter">
+			<property name="prefix" value="components." />
+			<property name="escapeJsStrings" value="true" />
+			<property name="matches">
+				<list>
+					<value>/**/toolbar.js</value>
+					<value>/**/inplace.js</value>
+					<value>/**/components.js</value>
+				</list>
+			</property>
+		</bean>
+	</override:add>
+	
+	<override:add ref="resourceMappings" append="true">
+		<bean class="org.riotfamily.core.resource.ResourceMapping">
+			<property name="path" value="/" />
+			<property name="location" value="classpath:/org/riotfamily/components/runtime/resources/" />
+		</bean>
+		<bean class="org.riotfamily.core.resource.ResourceMapping">
+			<property name="path" value="/" />
+			<property name="location" value="classpath:/org/riotfamily/pages/runtime/resources/" />
+		</bean>
+	</override:add>
+	
+	
+	<override:add ref="customStyleSheets">
+		<value>style/riot-pages.css</value>
+	</override:add>
+	
+	<override:add ref="formRepository" property="configLocations" append="true">
+		<value>classpath:/org/riotfamily/pages/runtime/forms.xml</value>
+	</override:add>
+	 	 	
+	
+	
+	<!--  Pages -->
+	
+	<bean id="pageFormInitializer" class="org.riotfamily.pages.riot.form.PageFormInitializer">
+		<constructor-arg ref="contentFormRepository" />
+	</bean>
+
+	<bean id="siteFormInitializer" class="org.riotfamily.pages.riot.form.SiteFormInitializer">
+		<constructor-arg ref="contentFormRepository" />
+	</bean>
+
+	
+	<override:properties ref="riotUserDao">
+		<property name="entityClass" value="org.riotfamily.pages.riot.security.SiteUser" />
+	</override:properties>
+	
+	<!-- DAOs and models -->
+
+	<bean id="siteRiotDao" class="org.riotfamily.pages.riot.dao.SiteRiotDao" />
+
+ 	<bean id="pageRiotDao" class="org.riotfamily.pages.riot.dao.PageRiotDao" />
+	
+	<bean id="locales" class="org.riotfamily.pages.riot.form.SiteLocalesOptionsModel" />
+
+	<!-- Policies -->
+	
+	<bean id="siteUserPolicy" class="org.riotfamily.pages.riot.security.SiteUserPolicy" />
+	
+	<bean id="masterPagePolicy" class="org.riotfamily.pages.riot.security.MasterPagePolicy" />
+	
+	<!--  FreeMarker Object Wrappers  -->
+
+	<bean id="siteObjectWrapperPlugin" class="org.riotfamily.pages.view.SiteObjectWrapperPlugin" />
+	<bean id="pageObjectWrapperPlugin" class="org.riotfamily.pages.view.PageObjectWrapperPlugin" />
+	
+	<s:list id="sitemaps" icon="world">
+		<s:dao>
+			<ref bean="siteRiotDao" />
+		</s:dao>
+		<s:columns>
+			<s:column property="locale">
+				<bean class="org.riotfamily.core.ui.CountryFlagRenderer">
+					<constructor-arg ref="resourcePath" />
+				</bean>
+			</s:column>
+			<s:column property="name" />
+		</s:columns>
+		<s:commands>
+			<bean class="org.riotfamily.core.screen.list.command.impl.GoCommand" />
+		</s:commands>
+		<ref bean="sitemap" />
+	</s:list>
+	
+	<s:list id="sitemap" icon="sitemap">
+		<s:dao>
+			<ref bean="pageRiotDao" />
+		</s:dao>
+		<s:columns>
+			<s:column property="title" />
+			<s:column property="pathComponent" />
+			<s:column>
+				<bean class="org.riotfamily.components.riot.ui.PublishStatusRenderer" />
+			</s:column>
+		</s:columns>
+		<s:commands>
+			<bean class="org.riotfamily.pages.riot.command.EditPageCommand">
+				<constructor-arg ref="screenRepository" />
+				<constructor-arg ref="formRepository" />
+			</bean>
+			<bean class="org.riotfamily.pages.riot.command.GotoPageCommand" />
+			<bean class="org.riotfamily.core.screen.list.command.impl.MoveUpCommand" />
+			<bean class="org.riotfamily.core.screen.list.command.impl.MoveDownCommand" />
+			<bean class="org.riotfamily.core.screen.list.command.impl.clipboard.CutCommand" />
+			<bean class="org.riotfamily.core.screen.list.command.impl.clipboard.PasteCommand" />
+			<bean class="org.riotfamily.core.screen.list.command.impl.DeleteCommand" />
+			<bean class="org.riotfamily.components.riot.command.PublishCommand" />
+			<bean class="org.riotfamily.components.riot.command.UnpublishCommand" />
+			<bean class="org.riotfamily.core.screen.list.command.impl.AddCommand" />
+		</s:commands>
+		<s:form id="page" icon="page" />
+	</s:list>
+
+	<s:list id="sites" icon="world">
+		<s:dao>
+			<ref bean="siteRiotDao" />
+		</s:dao>
+		<s:columns>
+			<s:column property="name" />
+			<s:column property="locale" />
+			<s:column property="enabled" />
+		</s:columns>
+		<s:commands>
+			<bean class="org.riotfamily.core.screen.list.command.impl.EditCommand" />
+			<bean class="org.riotfamily.core.screen.list.command.impl.MoveUpCommand" />
+			<bean class="org.riotfamily.core.screen.list.command.impl.MoveDownCommand" />
+			<bean class="org.riotfamily.core.screen.list.command.impl.DeleteCommand" />
+			<bean class="org.riotfamily.core.screen.list.command.impl.AddCommand" />
+		</s:commands>
+		<s:form id="site" />
+	</s:list>
+	
+	<override:add ref="systemScreens">
+		<ref bean="sites" />
+	</override:add>
+
+</beans>

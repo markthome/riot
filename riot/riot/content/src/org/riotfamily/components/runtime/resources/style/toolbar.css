@@ -1,0 +1,396 @@
+#riot-notification {
+	background: #cb0038;
+	color: #fff;
+	padding: 10px;
+	text-align: center;
+	position: absolute;
+	top: 0;
+	width: 100%;
+}
+#riot-notification a {
+	color: #fff;
+}
+
+#riot-toolbar,
+#riot-inspector {
+	position: absolute;
+	top: 6px;
+}
+
+body > #riot-toolbar,
+body > #riot-inspector,
+body > #riot-notification {
+	position: fixed;
+}
+
+#riot-toolbar {
+	left: 6px;
+	z-index: 1000;
+}
+
+#riot-toolbar-ie-shadow {
+	position: absolute;
+	width: 40px;
+	height: 290px;
+	background-color: #000;
+	z-index: 1001;
+	filter:progid:DXImageTransform.Microsoft.Blur(
+         pixelRadius=5,MakeShadow=true,ShadowOpacity=0.3);
+}
+
+#riot-toolbar-content {
+	position: absolute;
+	z-index: 1002;
+	text-align: left;
+	width: 40px;
+	background: url(images/toolbar/background.gif) no-repeat;
+	box-shadow: 7px 7px 12px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 7px 7px 12px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 7px 7px 12px rgba(0, 0, 0, 0.3);
+}
+
+#riot-toolbar-title {
+	width: 40px;
+	height: 20px;
+	cursor: move;
+}
+
+#riot-toolbar-buttons {
+	width: 38px;
+	margin: 3px 0 4px 2px;
+}
+
+#riot-toolbar-buttons a {
+	margin: 0 3px 2px 3px;
+}
+
+#riot-toolbar a.toolbar-button,
+#riot-toolbar a.toolbar-button-active,
+#riot-toolbar a.toolbar-button-disabled {
+	display: block;
+	width: 30px;
+	height: 31px;
+	background-image: url(images/toolbar/buttons.png);
+	background-repeat: no-repeat;
+	padding: 0;
+	cursor: default;
+}
+
+#riot-toolbar a.toolbar-button,
+#riot-toolbar a.toolbar-button-active {
+	-moz-outline: none;
+}
+
+#riot-toolbar-button-browse a {
+	background-position: -62px 0;
+}
+#riot-toolbar-button-browse a.toolbar-button:hover {
+	background-position: -31px 0;
+}
+#riot-toolbar-button-browse a.toolbar-button-active,
+#riot-toolbar-button-browse a.toolbar-button:active {
+	background-position: 0 0;
+}
+
+#riot-toolbar-button-insert a {
+	background-position: -62px -31px;
+}
+#riot-toolbar-button-insert a.toolbar-button:hover {
+	background-position: -31px -31px;
+}
+#riot-toolbar-button-insert a.toolbar-button:active,
+#riot-toolbar-button-insert a.toolbar-button-active {
+	background-position: 0 -31px;
+}
+
+#riot-toolbar-button-remove a {
+	background-position: -62px -62px;
+}
+#riot-toolbar-button-remove a.toolbar-button:hover {
+	background-position: -31px -62px;
+}
+#riot-toolbar-button-remove a.toolbar-button-active,
+#riot-toolbar-button-remove a.toolbar-button:active {
+	background-position: 0 -62px;
+}
+
+
+#riot-toolbar-button-edit a {
+	background-position: -62px -93px;
+}
+#riot-toolbar-button-edit a.toolbar-button:hover {
+	background-position: -31px -93px;
+}
+#riot-toolbar-button-edit a.toolbar-button-active,
+#riot-toolbar-button-edit a.toolbar-button:active {
+	background-position: 0 -93px;
+}
+
+#riot-toolbar-button-properties a {
+	background-position: -62px -124px;
+}
+#riot-toolbar-button-properties a.toolbar-button:hover {
+	background-position: -31px -124px;
+}
+#riot-toolbar-button-properties a.toolbar-button-active,
+#riot-toolbar-button-properties a.toolbar-button:active {
+	background-position: 0 -124px;
+}
+
+#riot-toolbar-button-move a {
+	background-position: -62px -155px;
+}
+#riot-toolbar-button-move a.toolbar-button:hover {
+	background-position: -31px -155px;
+}
+#riot-toolbar-button-move a.toolbar-button-active,
+#riot-toolbar-button-move a.toolbar-button:active {
+	background-position: 0 -155px;
+}
+
+#riot-toolbar-button-preview a {
+	background-position: -62px -186px;
+}
+#riot-toolbar-button-preview a.toolbar-button:hover {
+	background-position: -31px -186px;
+}
+#riot-toolbar-button-preview a.toolbar-button-active,
+#riot-toolbar-button-preview a.toolbar-button:active {
+	background-position: 0 -186px;
+}
+#riot-toolbar-button-preview a.toolbar-button-disabled {
+	background-position: -93px -186px;
+}
+
+#riot-toolbar-button-logout a {
+	background-position: -62px -217px;
+}
+#riot-toolbar-button-logout a.toolbar-button:hover {
+	background-position: -31px -217px;
+}
+#riot-toolbar-button-logout a.toolbar-button:active {
+	background-position: 0 -217px;
+}
+
+#riot-toolbar a.toolbar-button-disabled {
+	cursor: default;
+}
+
+.riot-types {
+	position: absolute;
+	z-index: 100000;
+	line-height: 1em;
+	border: 1px solid #dadada;
+	box-shadow: 7px 7px 12px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 7px 7px 12px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 7px 7px 12px rgba(0, 0, 0, 0.3);
+}
+
+.riot-types .riot-close-button {
+	position: absolute;
+	z-index: 2;
+	top: -18px;
+	left: -17px;
+	width: 32px;
+	height: 32px;
+	background: url(images/toolbar/close.png) no-repeat;
+	_background-image: none;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${contextPath}${resourcePath}style/images/toolbar/close.png', sizingMethod='image');
+}
+
+.riot-types .riot-type-list {
+	position: relative;
+	background-color: #f0f0f0;
+	border-style: solid;
+	border-width: 1px 0 0 1px;
+	border-color: #fff;
+	max-height: 250px;
+	overflow: auto;
+	*width: 105px;
+}
+
+.riot-types .type {
+	display: block;
+	padding: 5px 28px 5px 12px;
+	font-family: "Trebuchet MS", arial, sans-serif;
+	font-size: 11px;
+	text-align: left;
+	text-decoration: none;
+	color: #3d3d3d;
+	background-repeat: no-repeat;
+	cursor: pointer;
+	cursor: hand;
+	line-height: 16px;
+	white-space: nowrap;
+	border: 1px solid #f0f0f0;
+	*width: 105px;
+}
+
+.riot-types .type:hover {
+	color: #fff;
+	background-color: #acacac;
+	border-color: #a0a0a0;
+}
+
+.riot-types .type .icon {
+	display: block;
+	width: 16px;
+	height: 16px;
+	float: left;
+	margin-right: 4px;
+}
+
+.riot-insert-button {
+	clear: both;
+	display: block;
+	height: 24px;
+	width: 24px;
+	background: url(images/toolbar/add_glow.png) left center no-repeat;
+	background-image: url(images/toolbar/add.png);
+	_background-image: none;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${contextPath}${resourcePath}style/images/toolbar/add.png', sizingMethod='image');
+	margin: -12px 0 0 -12px;
+	position: absolute;
+	z-index: 99999;
+}
+.riot-insert-button:hover {
+	background: url(images/toolbar/add_glow.png) left center no-repeat;
+
+}
+
+
+.riot-component-list:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.riot-component-list {
+	clear: both;
+	display: inline-block;
+}
+
+* html .riot-component-list {height: 1%;}
+.riot-component-list {display: block;}
+
+
+.riot-component-list .riot-component {
+	clear: none;
+}
+
+.riot-empty-list {
+	padding-top: 20px;
+}
+
+div.riot-editor {
+	clear: none;
+}
+
+.riot-moveable-component,
+.riot-moveable-component * {
+	cursor: move;
+}
+
+.riot-editable-text {
+	cursor: text;
+}
+
+.riot-editable-text,
+.riot-mode-remove .riot-component,
+.riot-mode-properties .riot-form {
+	cursor: crosshair;
+}
+
+.riot-mode-insert,
+.riot-mode-remove,
+.riot-mode-properties {
+	user-select: none;
+	-moz-user-select: none;
+	cursor: default;
+}
+
+div.riot-highlight {
+	position: absolute;
+	z-index: 999;
+	width: 1px;
+	height: 1px;
+}
+div.riot-highlight-left, 
+div.riot-highlight-right {
+	background: url(images/ants_v.gif);
+	overflow: hidden;
+}
+div.riot-highlight-top, 
+div.riot-highlight-bottom {
+	background: url(images/ants_h.gif);
+	overflow: hidden;
+}
+
+.riot-empty-list {
+	padding: 10px;
+}
+
+
+.riot-dialog textarea {
+	border: none;
+	margin-top: 1px;
+	padding-left: 20px;
+	font-family: monospace;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.riot-dialog div.mceEditor {
+	width: 100%;
+}
+
+.riot-dialog .mceEditor img {
+	margin: 0;
+}
+
+.riot-dialog table.mceLayout {
+	border-spacing: 0;
+	border-collapse: collapse;
+	border: none;
+}
+.riot-dialog td {
+	padding: 0;
+	margin: 0;
+}
+
+#riotLoadingOverlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #000 url(images/toolbar/wait.gif) center center no-repeat;
+	filter: alpha(opacity=60);
+	-moz-opacity: 0.6;
+	opacity: 0.6;
+	z-index: 1001;
+}
+body > #riotLoadingOverlay {
+	position: fixed;
+}
+
+#riotPreviewFrame {
+	visibility: hidden;
+	display: none;
+	border: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background: #fff;
+}
+body > #riotPreviewFrame {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.riot-inplace-text-editor:focus {
+	outline: none;
+}

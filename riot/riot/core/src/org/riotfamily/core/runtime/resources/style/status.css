@@ -1,0 +1,37 @@
+@import url(common.css);
+
+body {
+	padding-top: 1px;
+	padding-bottom: 0;
+}
+
+body, a {
+	font-size: 11px;
+}
+
+#panel {
+	background-color: #ebebeb;
+}
+#status {
+	padding: 10px 0 10px 30px;
+}
+
+.value {
+	margin-right: 10px;
+}
+
+a {
+	color: ${highlight_color};
+	text-decoration: none;
+}
+b {
+	margin-right: 10px;
+}
+#loading {
+	visibility: hidden;
+	background-color: ${highlight_color};
+	color: #fff;
+	float: right;
+	padding: 2px 4px;
+	margin-right: 10px;
+}

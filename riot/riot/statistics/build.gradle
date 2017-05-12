@@ -1,0 +1,7 @@
+dependencies {
+	compile project(':core')
+	compile project(':common')
+	compile libraries.spring_core
+	compile libraries.c3p0
+	compile libraries.servlet_api
+}

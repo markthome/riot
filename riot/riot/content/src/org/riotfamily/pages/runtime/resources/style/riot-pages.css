@@ -1,0 +1,86 @@
+table.pages th.locale,
+table.sites th.locale,
+table.site-chooser th.locale {
+	width: 20px;
+}
+
+table.sites th.locale span,
+table.site-chooser th.locale span {
+	display: none;
+}
+
+table.pages tr.foreign-page td {
+	color: #a4a4a4;
+	font-style: italic;
+}
+
+table.pages tr.hidden-node td,
+table.pages tr.hidden-page td {
+	color: #a4a4a4;
+}
+
+.publish-status {
+	width: 32px;
+	height: 32px;
+	float: right;
+}
+
+.publish-status-translatable {
+	background: url(images/publish_state.png) 2px -96px no-repeat;
+}
+.publish-status-published {
+	background: url(images/publish_state.png) 2px -64px no-repeat;
+}
+.publish-status-dirty {
+	background: url(images/publish_state.png) 2px -32px no-repeat;
+}
+.publish-status-new {
+	background: url(images/publish_state.png) 2px 0px no-repeat;
+}
+
+.pageProperty b {
+	display: -moz-inline-box;
+	display: inline-block;
+	vertical-align: middle;
+	height: 15px;
+	margin: 0 1px 2px 2px;
+	background: ${highlight_color} url(images/button-notch-small.gif) repeat-x;
+}
+.pageProperty b input {
+	display: block;
+	_display: inline-block;
+	color: #fff;
+	text-decoration: none;
+	font-size: 11px;
+	font-family: Arial;
+	height: 15px;
+	line-height: 15px !important;
+	border: 0;
+	padding: 0 2px;
+	margin: 0 1px;
+	background: ${highlight_color};
+}
+/* Fix 1px offset issue in Firefox */
+.pageProperty b input::-moz-focus-inner { 
+	border: none;
+}
+
+.pagePropertyOverwrite b,
+.pagePropertyOverwrite b input {
+	background-color: ${label_color};
+}
+
+.pagePropertyInherit .listEditor .button-add, 
+.pagePropertyInherit .nestedForm .not-present .button-toggle {
+	background-image:url(images/add_grey.gif);
+}
+
+form .pagePropertyInherit,
+form .pagePropertyInherit label,
+form .pagePropertyInherit .label,
+form .pagePropertyInherit .box-title label {
+	color: #999;
+}
+.pagePropertyInherit .listEditor .button-add {
+	display: none;
+}

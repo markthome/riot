@@ -1,0 +1,163 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.6
+
+// Load dependencies
+apply from: 'dependencies.gradle'
+
+
+allprojects {
+	group = 'org.riotfamily'
+	version = '9.3.0'
+
+	repositories {
+		mavenLocal()
+		maven {
+        	url "http://repository.riotfamily.org/external"
+ 	    }
+		maven {
+      	  url "http://repository.riotfamily.org/cache"
+	    }
+	}
+
+	task release
+}
+
+subprojects {
+
+	apply plugin: 'java'
+	apply plugin: 'maven'
+
+	release.dependsOn(uploadArchives)
+
+	sourceCompatibility = 1.6
+	targetCompatibility = 1.6
+
+	configurations.compile.transitive = true
+	configurations.testCompile.transitive = true
+
+	sourceSets {
+		main {
+			// No separate 'resources' dir - we keep everything under src
+			resources.srcDirs = java.srcDirs = ['src']
+		}
+		test {
+			// If the module contains web-tests, there is an extra 'src'
+			// and a 'webapp' dir under /test. Otherwise the sources are
+			// located directly under /test.
+			resources.srcDirs = java.srcDirs = [file('test/src').exists() ? 'test/src' : 'test']
+		}
+	}
+	
+	// Add META-INF directory
+	jar {
+		// Add project-name and version to the manifest
+		manifest {
+			attributes 'Implementation-Title': project.name,
+					   'Implementation-Version': project.version,
+					   'Implementation-Vendor': 'riotfamily.org'
+		}
+		
+		metaInf {
+			from fileTree('META-INF')
+		}
+	}
+	
+	// Create source artifacts for Java projects
+
+	if (isJavaProject(project)) {
+		dependencies {
+			testCompile libraries.junit
+			testCompile libraries.spring_test
+		}
+		
+		task sourceJar(type: Jar) {
+			from sourceSets.main.allSource
+			classifier = 'sources'
+		}
+		artifacts {
+			archives sourceJar
+		}
+		
+	}
+
+
+	if (rootProject.hasProperty('artifactory.publish.username') && rootProject.hasProperty('artifactory.publish.password')) {
+        uploadArchives {
+			repositories {
+				mavenDeployer {
+					//repository(url: "file://$System.env.HOME/.m2/repository")
+					repository(url: "http://repository.riotfamily.org/releases") {
+						authentication(userName: project.'artifactory.publish.username', password: project.'artifactory.publish.password')
+					}
+					snapshotRepository(url: "http://repository.riotfamily.org/snapshots") {
+						authentication(userName: project.'artifactory.publish.username', password: project.'artifactory.publish.password')
+					}
+				}
+			}
+		}
+	}
+}
+
+// The root project uses the Java plugin (allthough it's actually a meta
+// project) in order to generate a merged .classpath file for Eclipse.
+// We disable the 'jar' and 'classes' targets so that no 'build' folder
+// gets created.
+
+classes.enabled = false
+jar.enabled = false
+
+eclipse.project.natures << 'org.springframework.ide.eclipse.core.springnature'
+
+eclipse.classpath.file {
+	whenMerged { classpath ->
+		classpath.entries.each { entry ->
+			if (entry.kind == 'src') {
+				entry.output = entry.path.replaceAll('(.+?)/.*', '$1/build/eclipse')
+			}
+		}
+	}
+}
+
+gradle.taskGraph.whenReady {taskGraph ->
+	if (taskGraph.hasTask(':eclipseClasspath')) {
+		subprojects.each {
+			// Collect source folders
+			it.sourceSets*.java.srcDirs.flatten().each { entry ->
+				project.sourceSets.main.java.srcDirs(entry)
+
+			}
+
+			// Collect all external dependencies from the testRuntime configuration
+			it.configurations.findByName('testRuntime')?.getAllDependencies().withType(ExternalDependency.class).each {
+				project.configurations.compile.getDependencies().add(it)
+			}
+		}
+	}
+	if (!taskGraph.hasTask(':release')) {
+		allprojects {
+			version += "-SNAPSHOT"
+		}
+	}
+}
+
+task deployArchives {
+    dependsOn { subprojects.uploadArchives }
+}
+
+/**
+ * Creates the gradlew wrapper scripts
+ */
+task wrapper(type: Wrapper) {
+	jarFile = '.gradlew/gradle-wrapper.jar'
+	gradleVersion = '2.13'
+}
+
+// ---------------------------------------------------------------------------
+// Utility methods
+//----------------------------------------------------------------------------
+
+def isJavaProject(Project project) {
+	project?.name != 'jslibs'
+}

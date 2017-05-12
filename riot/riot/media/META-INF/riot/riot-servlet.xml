@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:override="http://www.riotfamily.org/schema/common/override"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util-4.3.xsd
+		http://www.riotfamily.org/schema/common/override
+		http://www.riotfamily.org/schema/common/override-9.3.xsd">
+
+	<override:put ref="customFormElements">
+		<entry key="{http://www.riotfamily.org/schema/media/form-elements}file-upload"
+				value="org.riotfamily.media.riot.form.FileUpload" />
+		<entry key="{http://www.riotfamily.org/schema/media/form-elements}image-upload"
+				value="org.riotfamily.media.riot.form.ImageUpload" />
+		<entry key="{http://www.riotfamily.org/schema/media/form-elements}flash-upload"
+				value="org.riotfamily.media.riot.form.FlashUpload" />
+		<entry key="{http://www.riotfamily.org/schema/media/form-elements}video-upload"
+				value="org.riotfamily.media.riot.form.VideoUpload" />
+		<entry key="{http://www.riotfamily.org/schema/media/form-elements}svg-upload"
+				value="org.riotfamily.media.riot.form.SvgUpload" />
+	</override:put>
+		
+	<override:add ref="resourceMappings" append="true">			
+		<bean class="org.riotfamily.core.resource.ResourceMapping">
+			<property name="path" value="/" />
+			<property name="location" value="classpath:/org/riotfamily/media/runtime/resources/" />
+		</bean>
+	</override:add>
+	
+	<override:add ref="messageBasenames" append="true">
+		<value>classpath:/org/riotfamily/media/runtime/i18n/messages</value>
+	</override:add>
+	
+    <bean id="riotImageRenderer" class="org.riotfamily.media.riot.ui.RiotImageRenderer" />
+
+</beans>

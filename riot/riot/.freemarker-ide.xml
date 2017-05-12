@@ -1,0 +1,18 @@
+<config>
+	<context-values>
+		<resource path="riot/src/org/riotfamily/riot/job/ui/JobView.ftl">
+			<value key="jobId" object-class="java.lang.Long"/>
+		</resource>
+		<resource path="riot/src/org/riotfamily/riot/security/ui/LoginStatusView.ftl">
+			<value key="sessionData" object-class="org.riotfamily.riot.security.session.SessionData"/>
+		</resource>
+		<resource path="riot/src/org/riotfamily/riot/security/ui/LoginFormView.ftl">
+			<value key="username" object-class="java.lang.String"/>
+		</resource>
+		<resource path="website/src/org/riotfamily/website/view/common.ftl">
+			<value key="commonMacroHelper" object-class="org.riotfamily.website.view.CommonMacroHelper"/>
+		</resource>		
+	</context-values>
+	<macro-library>
+	</macro-library>
+</config>

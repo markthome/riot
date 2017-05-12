@@ -1,0 +1,16 @@
+dependencies {
+	compile project(':common')
+	compile libraries.spring_webmvc
+	compile libraries.json_lib
+	compile libraries.servlet_api
+
+	runtime project(':jslibs')
+	compile libraries.commons_fileupload
+	compile libraries.commons_io
+
+	testCompile project(':common')
+
+	testRuntime 'org.mortbay.jetty:jetty:6.1.22'
+	testRuntime libraries.slf4j
+	testRuntime libraries.log4j
+}

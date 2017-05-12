@@ -1,0 +1,222 @@
+/**
+ * Common styles shared by several views
+ */
+html, body {
+	height:100%;
+}
+body {
+	background: #fff;
+	color: #3d3d3d;
+	margin: 0;
+	padding: 0;
+}
+body, a, td, th, h1, h2 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+b {
+	font-weight: normal;
+}
+img {
+	border: 0;
+}
+table {
+	border-spacing: 0;
+}
+td {
+	margin: 0;
+	padding: 0;
+	vertical-align: top;
+}
+
+#page {
+	background-color: #fff;
+	min-height: 100%;
+	_height: 100%;
+}
+#header {
+	padding: 30px;
+	overflow: hidden;
+}
+#logo {
+	position: absolute;
+	top: 25px;
+	right: 37px;
+	background-position: top right;
+	background-repeat: no-repeat;
+	
+}
+#content {
+	clear: both;
+	position: relative;
+	margin: 10px 20px 0 30px;
+}
+#footer {
+	background: #575757 url(images/footer/bg.gif) repeat-x;
+	color: #cacaca; 
+	height: 50px;
+	margin-top: -50px;
+}
+#footer-content {
+	height: 38px;
+	background: url(images/footer/logo.gif) right 18px no-repeat;
+	padding: 18px 0 0 30px;
+}
+#footer a {
+	color: #cacaca; 
+	text-decoration: none;
+}
+#footer a.logout {
+	padding-left: 16px;
+	margin-right: 4px;
+	background: url(images/footer/logout.gif) left center no-repeat;
+}
+#footer #changePassword {
+	margin-left: 2px;
+}
+
+.chooser #footer {
+	display: none;
+}
+.main {
+	padding: 0 300px 25px 0;
+	margin-bottom: 50px;
+}
+.extra {
+	width: 280px;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.wide {
+	margin-right: 0px;
+}
+.wide .extra {
+	display: none;
+}
+.extra .box {
+	border: 1px solid #dadada;
+	background-color: #f0f0f0;
+	padding: 10px;
+	margin-bottom: 50px;
+	width: 240px;
+	overflow: hidden;
+}
+.extra .box-title {
+	display: none;
+}
+.extra .box a {
+	color: #3d3d3d;
+	text-decoration: none;
+	background-repeat: no-repeat;
+}
+.extra .box a:hover {
+	text-decoration: underline;
+}
+
+.extra .box .status {
+	background-repeat: no-repeat;
+	padding-left: 22px;
+}
+
+span.locale img {
+	margin-right: 6px;
+}
+
+span.messageCode {
+	padding: 0 0 0 20px;
+	text-decoration: none;
+	background: url(images/i18n.gif) right center no-repeat;
+}
+
+
+#path {
+	overflow: hidden;
+}
+
+#path a {
+	text-decoration: none;
+	outline: none;
+	-moz-outline: none;
+}
+
+#path a,
+#path b {
+	display: block;
+	line-height: 31px;
+	background-repeat: no-repeat;
+	padding: 0;
+	margin: 0;
+}
+
+#path .screen {
+	float: left;
+	color: #333;
+}
+
+#path .screen {
+	background-image: url(images/path/next.gif);
+	padding: 0 0 0 19px;
+	margin-left: -19px;
+}
+#path a.screen:hover {
+	background-position: 0 -31px;
+}
+
+#path .first {
+	background-image: url(images/path/left.gif);
+	padding-left: 4px;
+	margin-left: 0;
+}
+#path a.first:hover {
+	background-position: 0 -31px;
+}
+#path b.active {
+	background-position: top right;
+	background-image: url(images/path/right.gif);
+	padding-right: 4px;
+}
+#path .screen b b {
+	background-repeat: repeat-x;
+	background-image: url(images/path/center.gif);
+	padding-left: 4px; 
+	padding-right: 23px;
+}
+#path a.screen:hover b b {
+	background-position: 0 -31px;
+}
+#path b.active b {
+	padding-right: 8px;
+}
+#path .first b b {
+	width: 22px;
+	height: 31px;
+	padding-left: 16px;
+}
+
+#path .first .title {
+	display: none;
+}
+.chooser #path .first .title {
+	display: inline;
+}
+.chooser #path .first b b {
+	width: auto;
+	padding-left: 8px;
+}
+#path span.icon {
+	display: block;
+	float: left;
+	height: 16px;
+	width: 16px;
+	margin: 7px 4px 0 0;
+	background-repeat: no-repeat;
+}
+#path .new {
+	padding-right: 12px;
+	background: url(images/path/new.gif) right top no-repeat;
+}
+
+#riot-notifications {
+	bottom: 56px;
+}
